@@ -1,0 +1,102 @@
+{
+  "fifa_sn": {
+    "stream_name": "fifa_sn",
+    "name": "FIFA VIP",
+    "desc": "Live Sports Feed",
+    "url_suffix": "fifa_sn",
+    "logo": "fifa.png"
+  },
+  "fifa_channel1": {
+    "stream_name": "fifa_channel1",
+    "name": "FIFA Channel 1",
+    "desc": "Live Sports Stream",
+    "url_suffix": "fifa_channel1",
+    "logo": "fifa.png"
+  },
+    "fifa_bengal_1": {
+    "stream_name": "fifa_bengal_1",
+    "name": "FIFA Bengal 1",
+    "desc": "Live Sports Feed",
+    "url_suffix": "fifa_bengal_1",
+    "logo": "fifa.png"
+  },
+  "fifa_bengal_2": {
+    "stream_name": "fifa_bengal_2",
+    "name": "FIFA Bengal 2",
+    "desc": "Live Sports Feed",
+    "url_suffix": "fifa_bengal_2",
+    "logo": "fifa.png"
+  },
+  "fifa_zee_bangla_cinema": {
+    "stream_name": "fifa_zee_bangla_cinema",
+    "name": "Zee Bangla Cinema",
+    "desc": "Live Entertainment",
+    "url_suffix": "fifa_zee_bangla_cinema",
+    "logo": "fifa.png"
+  },
+  "fifa_ptv": {
+    "stream_name": "fifa_ptv",
+    "name": "PTV",
+    "desc": "Live Network Feed",
+    "url_suffix": "fifa_ptv",
+    "logo": "fifa.png"
+  },
+
+  "fifa_channel2": {
+    "stream_name": "fifa_channel2",
+    "name": "FIFA Channel 2",
+    "desc": "Live Sports Stream",
+    "url_suffix": "fifa_channel2",
+    "logo": "fifa.png"
+  },
+  
+  "fifa_somoytv": {
+    "stream_name": "fifa_somoytv",
+    "name": "Somoy TV",
+    "desc": "Live News Feed",
+    "url_suffix": "fifa_somoytv",
+    "logo": "fifa.png"
+  },
+  "feed_fifa1": {
+    "stream_name": "feed_fifa1",
+    "name": "[feed] fifa_1",
+    "desc": "Live Sports Feed",
+    "url_suffix": "feed_fifa1",
+    "logo": "fifa.png"
+  },
+  "feed_fifa2": {
+    "stream_name": "feed_fifa2",
+    "name": "[feed] fifa_2",
+    "desc": "Live Sports Feed",
+    "url_suffix": "feed_fifa2",
+    "logo": "fifa.png"
+  },
+  "feed_fifa3": {
+    "stream_name": "feed_fifa3",
+    "name": "[feed] fifa_3",
+    "desc": "Live Sports Feed",
+    "url_suffix": "feed_fifa3",
+    "logo": "fifa.png"
+  },
+  "feed_fifa4": {
+    "stream_name": "feed_fifa4",
+    "name": "FIFA Feed 4",
+    "desc": "Live Sports Feed",
+    "url_suffix": "feed_fifa4",
+    "logo": "fifa.png"
+  },
+  "feed_fifa5": {
+    "stream_name": "feed_fifa5",
+    "name": "FIFA Feed 5",
+    "desc": "Live Sports Feed",
+    "url_suffix": "feed_fifa5",
+    "logo": "fifa.png"
+  },
+  "feed_fifa6": {
+    "stream_name": "feed_fifa6",
+    "name": "FIFA Feed 6",
+    "desc": "Live Sports Feed",
+    "url_suffix": "feed_fifa6",
+    "logo": "fifa.png"
+  }
+}
