@@ -1,6 +1,6 @@
 @echo off
 REM Change to your project directory
-cd /d "C:\Users\sohag\Downloads\LIVE TV"
+cd /d "C:\Users\sohag\Downloads\Live-TV-Web-Page-With-Token-Systems"
 
 REM Initialize Git if not already done
 IF NOT EXIST .git (
