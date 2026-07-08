@@ -58,8 +58,12 @@ This project provides a lightweight web interface with **HLS streaming**, **toke
 
 ## 📸 Banner Previews
 
+- Keep your **Index.php**.
+
 ![Screenshot 0](https://github.com/sohag1192/Live-TV-Web-Page-With-Token-Systems/blob/main/demo_img/1.png)  
 ![Screenshot 1](https://github.com/sohag1192/Live-TV-Web-Page-With-Token-Systems/blob/main/demo_img/2.png)
+- Keep your **Index_1.php**.
+![Screenshot 1](https://github.com/sohag1192/Live-TV-Web-Page-With-Token-Systems/blob/main/demo_img/index_1.png)
 
 
 
