@@ -31,7 +31,7 @@ $hash = sha1($hashsrt);
 
 // Format final token and streaming URL
 $token = $hash . '-' . $salt . '-' . $endtime . '-' . $starttime;
-$link = $flussonic . '/' . $stream . '/index.m3u8?DVR&token=' . $token . '&autoplay=true';
+$link = $flussonic . '/' . $stream . '/index.m3u8?token=' . $token . '&autoplay=true';
 ?>
 
 
