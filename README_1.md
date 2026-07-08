@@ -1,31 +1,18 @@
 
 # 📺 Live TV Web Page with Token System
 
-Secure, token-based PHP theme for **Flussonic streaming**.  
-This project provides a lightweight web interface with **HLS streaming**, **token authentication**, and **CDNBye P2P acceleration**.
+A secure, token‑based PHP theme for **Flussonic streaming**.  
+This project provides a lightweight web interface with **HLS streaming**, **token authentication**, and optional **CDNBye P2P acceleration**.
 
 ---
 
 ## ✨ Features
-- 🔐 **Secure Token System** – Protects streams with SHA1 + salt token generation.
+- 🔐 **Token Security** – SHA1 + salt token generation for stream protection.
 - 🎥 **HLS Streaming** – Supports DVR playback with secure URLs.
 - ⚡ **CDNBye Integration** – Optional P2P acceleration for bandwidth savings.
 - 🖥️ **Frontend Templates** – Multiple PHP themes (`index.php`, `index1.php`, `index2.php`).
 - 🔄 **Automation** – Batch script (`upload.bat`) for Git commits and updates.
 - 🛡️ **Apache Rewrite Rules** – `.htaccess` included for clean URLs.
-
----
-
-## 📂 Project Structure
-| File/Folder       | Description                                      |
-|-------------------|--------------------------------------------------|
-| `stream.php`      | 🔑 Core token generator + secure stream builder  |
-| `index.php`       | 🎨 Main frontend template                        |
-| `index1.php`      | 🎨 Alternative frontend template                 |
-| `index2.php`      | 🎨 Alternative frontend template                 |
-| `.htaccess`       | 🛡️ Apache rewrite rules                         |
-| `upload.bat`      | ⚙️ Git automation script                        |
-| `img/`            | 🖼️ Screenshots and assets                       |
 
 ---
 
@@ -68,13 +55,36 @@ This project provides a lightweight web interface with **HLS streaming**, **toke
 
 ---
 
-## 📸 Screenshots
-(Add your screenshots here using Markdown image syntax)
+## 📸 Banner Previews
+
+![Screenshot 0](https://github.com/sohag1192/Live-TV-Web-Page-With-Token-Systems/blob/main/demo_img/1.png)  
+![Screenshot 1](https://github.com/sohag1192/Live-TV-Web-Page-With-Token-Systems/blob/main/demo_img/2.png)
+
+
 
 ---
 
 ## 📜 License
-Licensed under **AGPL-3.0**.  
+Licensed under **AGPL-3.0**  
 Maintainer: **Md. Sohag Rana (sohag1192)**
 
 ---
+
+
+## 🙋 Contributing
+
+- Issues and pull requests are welcome.  
+- If you find bugs or want to suggest improvements, please open an issue or PR.  
+
+📬 **Contact via Mail:** [sohag1192@gmail.com](mailto:sohag1192@gmail.com)
+
+📬 **Contact via Telegram:** [Md_Sohag_Rana](https://t.me/Md_Sohag_Rana)
+
+
+---
+
+## 🌟 Support
+
+If you enjoy this project, please ⭐ it on GitHub — your support motivates future updates!
+
+
