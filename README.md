@@ -1,94 +1,58 @@
-# 📺 Live-TV Web Page With Token Systems (Flussonic)  ![Badge](https://hitscounter.dev/api/hit?url=https%3A%2F%2Fgithub.com%2Fsohag1192%2FLive-TV-Web-Page-With-Token-Systems&label=&icon=github&color=%23198754&message=&style=flat&tz=UTC)
-## 📌 Project Overview
-- **Name:** Live-Tv-Server-theme (Flussonic token systems)  
-- **Maintainer:** Md. Sohag Rana  
-- **Languages:** PHP (~97.5%), Batchfile (~2.5%)  
-- **Purpose:** Secure live TV streaming with tokenized URLs for Emby/Jellyfin or standalone web servers.  
-- **Demo:** Provides screenshots and frontend templates for live TV pages.
+
+# 📺 Live TV Web Page with Token System ![Badge](https://hitscounter.dev/api/hit?url=https%3A%2F%2Fgithub.com%2Fsohag1192%2FLive-TV-Web-Page-With-Token-Systems&label=&icon=github&color=%23198754&message=&style=flat&tz=UTC)
+
+
+A secure, token‑based PHP theme for **Flussonic streaming**.  
+This project provides a lightweight web interface with **HLS streaming**, **token authentication**, and optional **CDNBye P2P acceleration**.
 
 ---
 
-## 🚀 Features
-- **🔐 Secure Token Generation:** Uses random salt + SHA1 hashing for unique Flussonic tokens.  
-- **🎥 HLS Streaming:** Supports DVR playback with secure URLs.  
-- **⚡ Performance:** Optional CDNBye P2P acceleration for bandwidth savings.  
-- **🌍 Flexible IP Handling:** Works with CDN/P2P setups.  
-- **🖥️ Simple PHP Theme:** Lightweight frontend templates (`index.php`).  
-- **📂 Automation:** Includes `upload.bat` for Git commits and `.htaccess` for Apache rewrite rules. 
----
-
-## 📂 File Structure
-- **index.php ** → Frontend templates for live TV pages  
-- **stream.php** → Token generator and stream URL builder  
-- **.htaccess** → Apache rewrite rules for clean URLs  
-- **upload.bat** → Batch script for Git automation  
-- **img/** → Screenshots and assets 
-
----
-
----
-
-## 🚀 Features
-- One‑command installation of Apache2 + PHP  
-- Auto‑configuration of Apache to allow all files  
-- Deployment of a PHP test page (`info.php`)  
-- Easy uninstallation script to clean up packages and configs  
-
----
-
-## 📦 Installation
-Apache2-PHP Installer  and run the installer click the url:
-
-https://github.com/sohag1192/Apache2-PHP
-
+## ✨ Features
+- 🔐 **Token Security** – SHA1 + salt token generation for stream protection.
+- 🎥 **HLS Streaming** – Supports DVR playback with secure URLs.
+- ⚡ **CDNBye Integration** – Optional P2P acceleration for bandwidth savings.
+- 🖥️ **Frontend Templates** – Multiple PHP themes (`index.php`, `index1.php`, `index2.php`).
+- 🔄 **Automation** – Batch script (`upload.bat`) for Git commits and updates.
+- 🛡️ **Apache Rewrite Rules** – `.htaccess` included for clean URLs.
 
 ---
 
 ## ⚙️ Installation
-1. **Clone the repository:**
+1. **Clone Repository**
    ```bash
    git clone https://github.com/sohag1192/Live-TV-Web-Page-With-Token-Systems.git
-   cd Live-Tv-Server-theme
+   cd Live-TV-Web-Page-With-Token-Systems
    ```
-2. **Configure Flussonic server:**
-   - Set server address and secret key in `stream.php`.
-3. **Deploy PHP files:**
+
+2. **Configure Flussonic**
+   - Edit `stream.php` and set:
+     - Server address
+     - Secret key (keep private!)
+
+3. **Deploy PHP Files**
    - Place files on Apache/Nginx with PHP support.
-4. **Access streams:**
-   ```bash
+
+4. **Access Streams**
+   ```url
    https://yourserver/stream.php?stream=channel_name&type=live
    ```
 
-
 ---
 
-## 🔧 Example Usage
-```bash
-https://yourserver/stream.php?stream=channel1&type=live
+## 📊 Example Output
+```json
+{
+  "token": "secure_generated_token",
+  "url": "https://yourserver/channel1/index.m3u8?token=..."
+}
 ```
-- Response: JSON object containing secure token and HLS playback URL. 
 
 ---
 
-## 📜 License & Notes
-- **Maintained by:** Md. Sohag Rana  
-- **Important:** Keep your Flussonic secret key private.  
-
-
----
-
-## ✅ Summary Table
-
-| Component       | Purpose                                      |
-|-----------------|----------------------------------------------|
-| `stream.php`    | Token generator + stream URL builder         |
-| `index.php`     | Frontend template for live TV page           |
-| `.htaccess`     | Apache rewrite rules                         |
-| `upload.bat`    | Git automation script                        |
-| `img/`          | Screenshots and assets                       |
-
----
-
+## 🛡️ Security Notes
+- Keep your **Flussonic secret key private**.
+- Do not expose `stream.php` logic publicly.
+- Use HTTPS for secure delivery.
 
 ---
 
@@ -101,7 +65,12 @@ https://yourserver/stream.php?stream=channel1&type=live
 
 ---
 
+## 📜 License
+Licensed under **AGPL-3.0**  
+Maintainer: **Md. Sohag Rana (sohag1192)**
+
 ---
+
 
 ## 🙋 Contributing
 
@@ -118,4 +87,5 @@ https://yourserver/stream.php?stream=channel1&type=live
 ## 🌟 Support
 
 If you enjoy this project, please ⭐ it on GitHub — your support motivates future updates!
+
 
