@@ -85,14 +85,21 @@ $pageTitle = $current ? htmlspecialchars($current['name']) . " - StreamHub" : "S
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
+        /* --- NEW ANIMATED BACKGROUND --- */
         body { 
             font-family: 'Inter', sans-serif; 
-            background-color: #0a0a0a;
-            background-image: 
-                radial-gradient(ellipse at 0% 0%, rgba(153, 27, 27, 0.15) 0px, transparent 50%),
-                radial-gradient(ellipse at 100% 100%, rgba(88, 28, 135, 0.15) 0px, transparent 50%);
+            background: linear-gradient(-45deg, #020617, #0f172a, #172554, #020617);
+            background-size: 400% 400%;
+            animation: flowingBG 15s ease infinite;
             background-attachment: fixed;
         }
+        
+        @keyframes flowingBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        /* ------------------------------- */
         
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
