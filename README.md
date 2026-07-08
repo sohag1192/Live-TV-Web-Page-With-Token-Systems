@@ -85,6 +85,8 @@ Maintainer: **Md. Sohag Rana (sohag1192)**
 
 📬 **Contact via Telegram:** [Md_Sohag_Rana](https://t.me/Md_Sohag_Rana)
 
+📬 **Direct Chats:** [Md_Sohag_Rana] (https://t.me/Md_Sohag_Rana?direct)
+
 
 ---
 
