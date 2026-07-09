@@ -87,6 +87,9 @@ Maintainer: **Md. Sohag Rana (sohag1192)**
 
 📬 **Direct Chats:** [Chat Now ](https://t.me/Md_Sohag_Rana?direct)
 
+📬 **Contact via Whatsapp:** [Md_Sohag_Rana](https://wa.me/qr/HUB2VXC22LW2P1)
+
+
 
 ---
 
