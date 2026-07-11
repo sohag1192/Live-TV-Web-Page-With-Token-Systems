@@ -1,11 +1,9 @@
 <?php
 session_start();
 
-// --- ADMIN CREDENTIALS ---
-$admin_user = 'Sohag';
-$admin_pass = 'Sohag1192@#';
-
 $error = '';
+// Point this to your .htpasswd file location
+$htpasswd_file = __DIR__ . '/.htpasswd'; 
 
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     header("Location: index.php");
@@ -13,14 +11,37 @@ if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $user = $_POST['username'] ?? '';
-    $pass = $_POST['password'] ?? '';
+    $user = trim($_POST['username'] ?? '');
+    $pass = trim($_POST['password'] ?? '');
 
-    if ($user === $admin_user && $pass === $admin_pass) {
+    $authenticated = false;
+
+    // Check if the .htpasswd file exists
+    if (file_exists($htpasswd_file)) {
+        // Read the file line by line
+        $lines = file($htpasswd_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        
+        foreach ($lines as $line) {
+            // Split the line into username and hash
+            list($stored_user, $stored_hash) = explode(':', $line, 2);
+
+            // If the username matches, verify the password
+            if ($user === trim($stored_user)) {
+                if (password_verify($pass, trim($stored_hash))) {
+                    $authenticated = true;
+                    break;
+                }
+            }
+        }
+    } else {
+        $error = "System Error: .htpasswd file is missing!";
+    }
+
+    if ($authenticated) {
         $_SESSION['admin_logged_in'] = true;
         header("Location: index.php");
         exit;
-    } else {
+    } elseif (!$error) {
         $error = "Invalid username or password!";
     }
 }

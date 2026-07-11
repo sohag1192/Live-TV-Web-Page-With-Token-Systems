@@ -1,0 +1,10 @@
+# 1. Disable directory browsing so people can't see a list of your files
+Options -Indexes
+
+# 2. Block direct web access to .htpasswd and .htaccess files
+<FilesMatch "^\.ht">
+    Require all denied
+</FilesMatch>
+
+# Optional: Force PHP errors to be hidden from users (Good for production)
+php_flag display_errors Off
