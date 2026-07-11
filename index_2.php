@@ -311,6 +311,33 @@ $pageTitle = $current ? htmlspecialchars($current['name']) . " - StreamHub" : "S
                 setTimeout(() => { iframe.src = streamSrc; }, 150);
             }
         }
+
+        // --- FULLSCREEN AUTO LANDSCAPE LOGIC ---
+        const handleFullscreenChange = async () => {
+            const isFullscreen = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+            
+            if (isFullscreen) {
+                // Lock orientation to landscape when entering fullscreen
+                if (screen.orientation && screen.orientation.lock) {
+                    try {
+                        await screen.orientation.lock('landscape');
+                    } catch (error) {
+                        console.warn('Orientation lock failed:', error);
+                    }
+                }
+            } else {
+                // Unlock orientation when exiting fullscreen
+                if (screen.orientation && screen.orientation.unlock) {
+                    screen.orientation.unlock();
+                }
+            }
+        };
+
+        // Event listeners for different browsers
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
     });
     </script>
 </body>
