@@ -14,30 +14,14 @@ if (isset($_GET['logout'])) {
     exit;
 }
 
-// --- 3. CONFIGURATION & AUTO-CREATE DIR/FILE ---
-$appdataDir = __DIR__ . '/appdata';
-$jsonFile = $appdataDir . '/channel.json';
+// --- 3. CONFIGURATION & DATA LOAD ---
+$jsonFile = __DIR__ . '/../appdata/channel.json';
 $message = '';
 $msgType = '';
 
-// Attempt to create directory if it doesn't exist
-if (!is_dir($appdataDir)) {
-    @mkdir($appdataDir, 0777, true);
-    @chmod($appdataDir, 0777); // Try to set writable permissions
-}
-
-// Attempt to create the JSON file if it doesn't exist
-if (is_dir($appdataDir) && !file_exists($jsonFile)) {
-    @file_put_contents($jsonFile, json_encode([], JSON_PRETTY_PRINT));
-    @chmod($jsonFile, 0666);
-}
-
-// Check if the system is actually writable
-$isWritable = false;
-if (file_exists($jsonFile) && is_writable($jsonFile)) {
-    $isWritable = true;
-} elseif (!file_exists($jsonFile) && is_writable($appdataDir)) {
-    $isWritable = true;
+// Ensure directory exists
+if (!is_dir(__DIR__ . '/../appdata')) {
+    mkdir(__DIR__ . '/../appdata', 0777, true);
 }
 
 // Load existing channels
@@ -50,7 +34,7 @@ if (file_exists($jsonFile) && is_readable($jsonFile)) {
 }
 
 // --- 4. FORM SUBMISSION HANDLER (ADD, EDIT, DELETE) ---
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isWritable) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'delete') {
@@ -63,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isWritable) {
         }
     } elseif ($action === 'save') {
         // --- ADD / EDIT LOGIC ---
-        $original_id = trim($_POST['original_id'] ?? ''); 
+        $original_id = trim($_POST['original_id'] ?? ''); // Used when editing
         $channel_id  = trim($_POST['channel_id'] ?? '');
         $name        = trim($_POST['name'] ?? '');
         $desc        = trim($_POST['desc'] ?? '');
@@ -71,18 +55,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isWritable) {
         $url_suffix  = trim($_POST['url_suffix'] ?? '');
 
         if (!empty($channel_id) && !empty($name) && !empty($url_suffix)) {
+            
+            // Check if ID is being changed to an existing one during edit
             if ($original_id !== '' && $original_id !== $channel_id && isset($channels[$channel_id])) {
                 $message = "Cannot rename ID. The Channel ID '{$channel_id}' already exists!";
                 $msgType = 'error';
             } 
+            // Check if adding new but ID exists
             elseif ($original_id === '' && isset($channels[$channel_id])) {
                 $message = "Channel ID '{$channel_id}' already exists! Use a unique ID.";
                 $msgType = 'error';
             } else {
+                // If editing and ID changed, remove old entry
                 if ($original_id !== '' && $original_id !== $channel_id) {
                     unset($channels[$original_id]);
                 }
 
+                // Add or Update channel data
                 $channels[$channel_id] = [
                     'name' => $name,
                     'desc' => $desc,
@@ -101,18 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isWritable) {
 
     // Save modifications to JSON file
     if ($msgType === 'success') {
-        $saved = @file_put_contents($jsonFile, json_encode($channels, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), LOCK_EX);
+        $saved = file_put_contents($jsonFile, json_encode($channels, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE), LOCK_EX);
         if ($saved === false) {
             $message = "Failed to save to channel.json. Check file permissions.";
             $msgType = 'error';
         } else {
+            // Redirect to clear POST data and prevent double submission
             header("Location: admin.php?msg=" . urlencode($message) . "&type=" . $msgType);
             exit;
         }
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isWritable) {
-    $message = "Action blocked. The system does not have Write Permissions.";
-    $msgType = 'error';
 }
 
 // Check for redirect messages
@@ -159,42 +146,25 @@ if (isset($_GET['edit']) && isset($channels[$_GET['edit']])) {
                 <span class="font-bold text-xl text-white">StreamHub Admin</span>
             </div>
             
+
+
             <div class="flex gap-3">
                 <a href="index.php" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-semibold rounded-lg transition-colors border border-white/5">
                     <i class="ph ph-house text-lg"></i> View Site
                 </a>
+				    <a href="change_password.php" class="flex items-center gap-2 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-semibold rounded-lg transition-colors border border-white/5">
+        <i class="ph ph-key text-lg"></i> Password
+    </a>
                 <a href="?logout=1" class="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-semibold rounded-lg transition-colors border border-red-500/20">
                     <i class="ph ph-sign-out text-lg"></i> Logout
                 </a>
+            </div>
             </div>
         </div>
     </nav>
 
     <main class="flex-grow max-w-7xl mx-auto w-full p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        <!-- ================= PERMISSION WARNING BANNER ================= -->
-        <?php if (!$isWritable): ?>
-            <div class="lg:col-span-12 bg-red-950/50 border-l-4 border-red-500 p-5 rounded-r-xl shadow-lg">
-                <div class="flex items-start gap-4">
-                    <i class="ph-fill ph-warning-octagon text-red-400 text-3xl mt-0.5"></i>
-                    <div>
-                        <h3 class="text-red-400 font-bold text-lg mb-1">Directory Permission Error!</h3>
-                        <p class="text-red-200 text-sm mb-3">
-                            The server does not have write permissions to auto-create or save data. Channels cannot be saved until this is fixed.
-                        </p>
-                        <div class="bg-black/40 p-3 rounded-lg border border-red-500/20 font-mono text-xs text-red-100">
-                            <strong>Path:</strong> <?php echo $appdataDir; ?><br><br>
-                            <strong>How to fix:</strong><br>
-                            1. Go to your File Manager or SSH.<br>
-                            2. Manually create a folder named <code>appdata</code> in the same directory as this file.<br>
-                            3. Change the permissions (CHMOD) of the <code>appdata</code> folder to <code>777</code> or <code>775</code>.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <?php endif; ?>
-        <!-- ============================================================= -->
-
         <!-- Flash Message -->
         <?php if ($message): ?>
             <div class="lg:col-span-12 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2 <?php echo $msgType === 'success' ? 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400' : 'bg-red-500/10 border border-red-500/20 text-red-400'; ?>">
@@ -220,33 +190,33 @@ if (isset($_GET['edit']) && isset($channels[$_GET['edit']])) {
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Channel ID (Key) *</label>
-                        <input type="text" name="channel_id" value="<?php echo htmlspecialchars($editData['id']); ?>" required <?php echo !$isWritable ? 'disabled' : ''; ?> class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm disabled:opacity-50">
+                        <input type="text" name="channel_id" value="<?php echo htmlspecialchars($editData['id']); ?>" required class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                         <span class="text-[10px] text-slate-500 mt-1 block">Unique key. No spaces (e.g., gtv_live).</span>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Channel Name *</label>
-                        <input type="text" name="name" value="<?php echo htmlspecialchars($editData['name']); ?>" required <?php echo !$isWritable ? 'disabled' : ''; ?> class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm disabled:opacity-50">
+                        <input type="text" name="name" value="<?php echo htmlspecialchars($editData['name']); ?>" required class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Stream URL Suffix *</label>
-                        <input type="text" name="url_suffix" value="<?php echo htmlspecialchars($editData['url_suffix']); ?>" required <?php echo !$isWritable ? 'disabled' : ''; ?> class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm disabled:opacity-50">
+                        <input type="text" name="url_suffix" value="<?php echo htmlspecialchars($editData['url_suffix']); ?>" required class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                         <span class="text-[10px] text-slate-500 mt-1 block">Goes after <code>stream.php?stream=</code></span>
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Description</label>
-                        <input type="text" name="desc" value="<?php echo htmlspecialchars($editData['desc']); ?>" <?php echo !$isWritable ? 'disabled' : ''; ?> class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm disabled:opacity-50">
+                        <input type="text" name="desc" value="<?php echo htmlspecialchars($editData['desc']); ?>" class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Logo URL / Path</label>
-                        <input type="text" name="logo" value="<?php echo htmlspecialchars($editData['logo']); ?>" <?php echo !$isWritable ? 'disabled' : ''; ?> class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm disabled:opacity-50">
+                        <input type="text" name="logo" value="<?php echo htmlspecialchars($editData['logo']); ?>" class="w-full bg-neutral-950 border border-white/10 rounded-lg py-2.5 px-3 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                     </div>
 
                     <div class="pt-4 mt-2 flex gap-3">
-                        <button type="submit" <?php echo !$isWritable ? 'disabled' : ''; ?> class="flex-grow flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(79,70,229,0.3)] disabled:opacity-50 disabled:cursor-not-allowed">
+                        <button type="submit" class="flex-grow flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition-colors shadow-[0_0_15px_rgba(79,70,229,0.3)]">
                             <i class="ph-bold ph-floppy-disk text-lg"></i> <?php echo $editMode ? 'Update' : 'Save'; ?>
                         </button>
                         
@@ -310,14 +280,16 @@ if (isset($_GET['edit']) && isset($channels[$_GET['edit']])) {
                                         </td>
                                         <td class="p-4 align-middle text-right">
                                             <div class="flex items-center justify-end gap-2">
-                                                <a href="?edit=<?php echo urlencode($key); ?>" class="p-2 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded-lg transition-colors border border-amber-500/20 <?php echo !$isWritable ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''; ?>" title="Edit">
+                                                <!-- Edit Button -->
+                                                <a href="?edit=<?php echo urlencode($key); ?>" class="p-2 bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 rounded-lg transition-colors border border-amber-500/20" title="Edit">
                                                     <i class="ph-bold ph-pencil-simple text-base"></i>
                                                 </a>
                                                 
+                                                <!-- Delete Button (Form) -->
                                                 <form method="POST" action="admin.php" class="m-0" onsubmit="return confirm('Are you sure you want to delete this channel?');">
                                                     <input type="hidden" name="action" value="delete">
                                                     <input type="hidden" name="delete_id" value="<?php echo htmlspecialchars($key); ?>">
-                                                    <button type="submit" <?php echo !$isWritable ? 'disabled' : ''; ?> class="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors border border-red-500/20 disabled:opacity-50 disabled:cursor-not-allowed" title="Delete">
+                                                    <button type="submit" class="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors border border-red-500/20" title="Delete">
                                                         <i class="ph-bold ph-trash text-base"></i>
                                                     </button>
                                                 </form>

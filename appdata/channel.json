@@ -1,9 +1,14 @@
 {
-  "fifa_tv": {
-    "stream_name": "fifa_tv",
-    "name": "FIFA VIP",
-    "desc": "Live Sports Feed",
-    "url_suffix": "fifa_tv",
-    "logo": "fifa.png"
-  }
+    "fifa_tv": {
+        "name": "FIFA VIP",
+        "desc": "Live Sports Feed",
+        "logo": "fifa.png",
+        "url_suffix": "fake"
+    },
+    "dd": {
+        "name": "Md Sohag Rana",
+        "desc": "Live Sports Feed",
+        "logo": "http://100.100.100.2/img/fancode.png",
+        "url_suffix": "fifa_tv"
+    }
 }

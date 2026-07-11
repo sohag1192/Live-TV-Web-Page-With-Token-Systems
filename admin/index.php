@@ -146,13 +146,19 @@ if (isset($_GET['edit']) && isset($channels[$_GET['edit']])) {
                 <span class="font-bold text-xl text-white">StreamHub Admin</span>
             </div>
             
+
+
             <div class="flex gap-3">
                 <a href="index.php" target="_blank" class="flex items-center gap-2 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-semibold rounded-lg transition-colors border border-white/5">
                     <i class="ph ph-house text-lg"></i> View Site
                 </a>
+				    <a href="change_password.php" class="flex items-center gap-2 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-white text-sm font-semibold rounded-lg transition-colors border border-white/5">
+        <i class="ph ph-key text-lg"></i> Password
+    </a>
                 <a href="?logout=1" class="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-semibold rounded-lg transition-colors border border-red-500/20">
                     <i class="ph ph-sign-out text-lg"></i> Logout
                 </a>
+            </div>
             </div>
         </div>
     </nav>
