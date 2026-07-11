@@ -8,7 +8,7 @@ $admin_pass = 'Sohag1192@#';
 $error = '';
 
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-    header("Location: add_channel.php");
+    header("Location: index.php");
     exit;
 }
 
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($user === $admin_user && $pass === $admin_pass) {
         $_SESSION['admin_logged_in'] = true;
-        header("Location: add_channel.php");
+        header("Location: index.php");
         exit;
     } else {
         $error = "Invalid username or password!";
