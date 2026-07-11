@@ -1,10 +1,37 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 session_start();
 
 $error = '';
-// Point this to your .htpasswd file location
-$htpasswd_file = __DIR__ . '/.htpasswd'; 
+// Define the SQLite database file path
+$db_file = __DIR__ . '/streamhub.sqlite';
 
+// --- AUTO-SETUP DATABASE ---
+// If the database doesn't exist yet, create it and insert the default admin
+if (!file_exists($db_file)) {
+    $pdo = new PDO('sqlite:' . $db_file);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    // Create the users table
+    $pdo->exec("CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        password_hash TEXT NOT NULL
+    )");
+    
+    // Insert the default admin credentials (Username: Sohag, Password: [Your plain text password])
+    $default_hash = '$2y$10$KxIoniA34Q1amjHec5C9julsn1FnJYL9eK0.67A.wtAqEUkfT6lya';
+    $stmt = $pdo->prepare("INSERT INTO users (username, password_hash) VALUES (:user, :hash)");
+    $stmt->execute([':user' => 'Sohag', ':hash' => $default_hash]);
+} else {
+    // Connect to existing database
+    $pdo = new PDO('sqlite:' . $db_file);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+}
+
+// --- LOGIN CHECK ---
 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     header("Location: index.php");
     exit;
@@ -14,35 +41,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = trim($_POST['username'] ?? '');
     $pass = trim($_POST['password'] ?? '');
 
-    $authenticated = false;
+    if (!empty($user) && !empty($pass)) {
+        // Query the database securely using prepared statements to prevent SQL Injection
+        $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE username = :username");
+        $stmt->execute([':username' => $user]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Check if the .htpasswd file exists
-    if (file_exists($htpasswd_file)) {
-        // Read the file line by line
-        $lines = file($htpasswd_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        
-        foreach ($lines as $line) {
-            // Split the line into username and hash
-            list($stored_user, $stored_hash) = explode(':', $line, 2);
-
-            // If the username matches, verify the password
-            if ($user === trim($stored_user)) {
-                if (password_verify($pass, trim($stored_hash))) {
-                    $authenticated = true;
-                    break;
-                }
-            }
+        // Verify if the user exists and the password matches the hash
+        if ($row && password_verify($pass, $row['password_hash'])) {
+            $_SESSION['admin_logged_in'] = true;
+            header("Location: index.php");
+            exit;
+        } else {
+            $error = "Invalid username or password!";
         }
     } else {
-        $error = "System Error: .htpasswd file is missing!";
-    }
-
-    if ($authenticated) {
-        $_SESSION['admin_logged_in'] = true;
-        header("Location: index.php");
-        exit;
-    } elseif (!$error) {
-        $error = "Invalid username or password!";
+        $error = "Please fill in all fields.";
     }
 }
 ?>
@@ -63,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="max-w-md w-full bg-neutral-900/80 border border-white/10 p-8 rounded-2xl shadow-2xl backdrop-blur-xl">
         <div class="text-center mb-8">
             <div class="inline-flex bg-gradient-to-br from-indigo-500 to-cyan-400 p-3 rounded-xl shadow-lg mb-4">
-                <i class="ph-fill ph-lock-key text-white text-3xl leading-none"></i>
+                <i class="ph-fill ph-database text-white text-3xl leading-none"></i>
             </div>
             <h1 class="text-2xl font-bold text-white">Admin Access</h1>
             <p class="text-slate-400 text-sm mt-1">Login to manage StreamHub channels</p>
