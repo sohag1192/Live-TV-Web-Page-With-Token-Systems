@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// --- ADMIN CREDENTIALS (CHANGE THESE!) ---
+// --- ADMIN CREDENTIALS ---
 $admin_user = 'Sohag';
 $admin_pass = 'Sohag1192@#';
 
